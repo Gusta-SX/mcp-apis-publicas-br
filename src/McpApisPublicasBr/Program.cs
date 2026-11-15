@@ -1,4 +1,5 @@
-﻿using McpApisPublicasBr.Cep;
+﻿using McpApisPublicasBr.BancoCentral;
+using McpApisPublicasBr.Cep;
 using McpApisPublicasBr.Cnpj;
 using McpApisPublicasBr.Fipe;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,11 +31,18 @@ builder.Services.AddHttpClient<ConsultaFipe>(cliente =>
     cliente.Timeout = TimeSpan.FromSeconds(5);
 });
 
+builder.Services.AddHttpClient<ConsultaSerie>(cliente =>
+{
+    cliente.BaseAddress = new Uri("https://api.bcb.gov.br/");
+    cliente.Timeout = TimeSpan.FromSeconds(5);
+});
+
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
     .WithTools<CepFerramenta>()
     .WithTools<CnpjFerramenta>()
-    .WithTools<FipeFerramenta>();
+    .WithTools<FipeFerramenta>()
+    .WithTools<SerieFerramenta>();
 
 await builder.Build().RunAsync();

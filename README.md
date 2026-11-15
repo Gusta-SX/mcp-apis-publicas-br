@@ -2,7 +2,7 @@
 
 Servidor MCP em C# para consultar dados públicos a partir do Cursor, sem copiar a resposta de um site.
 
-As ferramentas prontas são CEP, CNPJ e FIPE. Banco Central e IBGE entram depois, uma por vez.
+As ferramentas prontas são CEP, CNPJ, FIPE e a série do Banco Central. O IBGE entra depois.
 
 ## CEP
 
@@ -34,9 +34,20 @@ Quatro ferramentas pequenas, na ordem da consulta. O tipo é `carros`, `motos` o
 
 Um tipo fora dessa lista não sai da máquina. Marca, modelo ou ano inexistente vira uma frase clara. Falha de rede ou tempo esgotado também, sem o JSON cru.
 
+## Banco Central
+
+A ferramenta se chama `consultar_serie_bcb`. Ela recebe o número da série do SGS, a data inicial e a data final, e devolve só data e valor.
+
+- A data entra como `dd/MM/aaaa` ou `aaaa-MM-dd`.
+- O intervalo máximo é de 90 dias. Acima disso, a consulta não sai da máquina.
+- A série 1 é o dólar de venda.
+- Série inexistente vira a frase “Série não encontrada”.
+- A chamada tem tempo limite de 5 segundos e não usa chave.
+- Falha de rede ou tempo esgotado vira uma frase clara, sem o texto cru da API.
+
 ## O que esta versão não faz
 
-- Não consulta Banco Central nem IBGE.
+- Não consulta IBGE.
 - Não consulta SQL Server.
 - Não pede chave paga e não hospeda um servidor na internet.
 - Não publica pacote no NuGet.
