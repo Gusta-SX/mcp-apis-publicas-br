@@ -2,7 +2,7 @@
 
 Servidor MCP em C# para consultar dados públicos a partir do Cursor, sem copiar a resposta de um site.
 
-As ferramentas prontas são CEP e CNPJ. FIPE, Banco Central e IBGE entram depois, uma por vez.
+As ferramentas prontas são CEP, CNPJ e FIPE. Banco Central e IBGE entram depois, uma por vez.
 
 ## CEP
 
@@ -23,9 +23,20 @@ A ferramenta se chama `consultar_cnpj`. Ela aceita o CNPJ com ou sem pontuação
 - Sócios, nome fantasia, CNAE, capital e o restante do cadastro ficam de fora.
 - Falha de rede ou tempo esgotado vira uma frase clara, sem o JSON cru.
 
+## FIPE
+
+Quatro ferramentas pequenas, na ordem da consulta. O tipo é `carros`, `motos` ou `caminhoes`. Não usa chave e cada chamada tem tempo limite de 5 segundos.
+
+- `consultar_marcas_fipe` devolve código e nome da marca.
+- `consultar_modelos_fipe` recebe o código da marca e devolve código e nome do modelo.
+- `consultar_anos_fipe` recebe marca e modelo e devolve o código do ano, como `2014-5`.
+- `consultar_preco_fipe` devolve marca, modelo, ano, valor, código FIPE e mês de referência.
+
+Um tipo fora dessa lista não sai da máquina. Marca, modelo ou ano inexistente vira uma frase clara. Falha de rede ou tempo esgotado também, sem o JSON cru.
+
 ## O que esta versão não faz
 
-- Não consulta FIPE, Banco Central nem IBGE.
+- Não consulta Banco Central nem IBGE.
 - Não consulta SQL Server.
 - Não pede chave paga e não hospeda um servidor na internet.
 - Não publica pacote no NuGet.
