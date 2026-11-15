@@ -1,4 +1,5 @@
 ﻿using McpApisPublicasBr.Cep;
+using McpApisPublicasBr.Cnpj;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -16,9 +17,16 @@ builder.Services.AddHttpClient<ConsultaCep>(cliente =>
     cliente.Timeout = TimeSpan.FromSeconds(5);
 });
 
+builder.Services.AddHttpClient<ConsultaCnpj>(cliente =>
+{
+    cliente.BaseAddress = new Uri("https://brasilapi.com.br/");
+    cliente.Timeout = TimeSpan.FromSeconds(5);
+});
+
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
-    .WithTools<CepFerramenta>();
+    .WithTools<CepFerramenta>()
+    .WithTools<CnpjFerramenta>();
 
 await builder.Build().RunAsync();
