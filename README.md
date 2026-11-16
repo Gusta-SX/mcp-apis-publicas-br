@@ -2,7 +2,7 @@
 
 Servidor MCP em C# para consultar dados públicos a partir do Cursor, sem copiar a resposta de um site.
 
-As ferramentas prontas são CEP, CNPJ, FIPE e a série do Banco Central. O IBGE entra depois.
+As ferramentas prontas são CEP, CNPJ, FIPE, a série do Banco Central e a localidade do IBGE.
 
 ## CEP
 
@@ -45,9 +45,18 @@ A ferramenta se chama `consultar_serie_bcb`. Ela recebe o número da série do S
 - A chamada tem tempo limite de 5 segundos e não usa chave.
 - Falha de rede ou tempo esgotado vira uma frase clara, sem o texto cru da API.
 
+## IBGE
+
+A ferramenta se chama `consultar_localidade_ibge`. Ela recebe o código de 7 dígitos do município e devolve nome, UF e região.
+
+- Um código que não tem 7 dígitos não sai da máquina.
+- A chamada ao IBGE tem tempo limite de 5 segundos. Não usa chave.
+- Município inexistente vira a frase “Localidade não encontrada”.
+- Microrregião, mesorregião e região imediata ficam de fora.
+- Falha de rede ou tempo esgotado vira uma frase clara, sem o JSON cru.
+
 ## O que esta versão não faz
 
-- Não consulta IBGE.
 - Não consulta SQL Server.
 - Não pede chave paga e não hospeda um servidor na internet.
 - Não publica pacote no NuGet.

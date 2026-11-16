@@ -2,6 +2,7 @@
 using McpApisPublicasBr.Cep;
 using McpApisPublicasBr.Cnpj;
 using McpApisPublicasBr.Fipe;
+using McpApisPublicasBr.Ibge;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -37,12 +38,19 @@ builder.Services.AddHttpClient<ConsultaSerie>(cliente =>
     cliente.Timeout = TimeSpan.FromSeconds(5);
 });
 
+builder.Services.AddHttpClient<ConsultaLocalidade>(cliente =>
+{
+    cliente.BaseAddress = new Uri("https://servicodados.ibge.gov.br/");
+    cliente.Timeout = TimeSpan.FromSeconds(5);
+});
+
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
     .WithTools<CepFerramenta>()
     .WithTools<CnpjFerramenta>()
     .WithTools<FipeFerramenta>()
-    .WithTools<SerieFerramenta>();
+    .WithTools<SerieFerramenta>()
+    .WithTools<LocalidadeFerramenta>();
 
 await builder.Build().RunAsync();
