@@ -1,8 +1,31 @@
-# APIs públicas brasileiras no Cursor
+# APIs públicas brasileiras
 
-Servidor MCP em C# para consultar dados públicos a partir do Cursor, sem copiar a resposta de um site.
+Servidor MCP em C# para consultar CEP, CNPJ, FIPE, Banco Central e IBGE. A resposta é curta: o cliente recebe o que pediu, sem a ficha inteira de um site.
+
+O processo fala o Model Context Protocol por stdin/stdout. O mesmo binário serve a qualquer cliente compatível, como Cursor, Claude, VS Code ou outro agente. Uma ferramenta nova entra sem mudar as que já existem. Cada consulta tem tempo limite, recusa entrada inválida antes de sair da máquina e é testada com uma resposta gravada, sem rede.
 
 As ferramentas prontas são CEP, CNPJ, FIPE, a série do Banco Central e a localidade do IBGE.
+
+## Como ligar
+
+O cliente inicia o processo e fala com ele pelo protocolo. O nome do campo de configuração muda de um aplicativo para outro. O comando é o mesmo:
+
+```json
+{
+  "mcpServers": {
+    "apis-publicas-br": {
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/McpApisPublicasBr/McpApisPublicasBr.csproj"
+      ]
+    }
+  }
+}
+```
+
+O caminho do projeto é o da sua máquina. O `global.json` pede o SDK .NET 8. O log vai para o stderr, para não misturar com o protocolo. Rodar `dotnet run` sozinho no terminal deixa o processo esperando essa conversa.
 
 ## CEP
 
@@ -68,6 +91,4 @@ A ferramenta se chama `consultar_localidade_ibge`. Ela recebe o código de 7 dí
 dotnet test mcp-apis-publicas-br.sln
 ```
 
-O `global.json` pede o SDK .NET 8. Os testes usam uma resposta gravada e não acessam a internet.
-
-O cliente MCP inicia o processo e fala por stdin/stdout. Log vai para o stderr, para não misturar com o protocolo. Rodar `dotnet run` no terminal deixa o processo esperando essa conversa.
+Os testes usam uma resposta gravada e não acessam a internet.
